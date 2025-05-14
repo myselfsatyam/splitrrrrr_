@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Users, User } from "lucide-react";
 import { CreateGroupModal } from "./components/create-group-modal";
 
-export default function ContactsPage() {
+function ContactsContent() {
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -147,5 +147,17 @@ export default function ContactsPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function ContactsPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto py-12">
+        <BarLoader width={"100%"} color="#36d7b7" />
+      </div>
+    }>
+      <ContactsContent />
+    </Suspense>
   );
 }
